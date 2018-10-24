@@ -1,53 +1,47 @@
+/*
+ * Copyright (C) 2018
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package ru.razornd.ml;
 
-import lombok.SneakyThrows;
-import org.springframework.web.bind.annotation.*;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBuffer;
-import java.awt.image.DataBufferByte;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/number-detection")
+@Slf4j
 public class PredictionController {
 
     private final NumberDetection numberDetection;
+    private final ImageConverter imageConverter;
 
-    public PredictionController(NumberDetection numberDetection) {
+    public PredictionController(NumberDetection numberDetection, ImageConverter imageConverter) {
         this.numberDetection = numberDetection;
+        this.imageConverter = imageConverter;
     }
 
     @PostMapping
-    public int predict(@RequestParam("image") MultipartFile image) throws IOException {
-        return numberDetection.detect(readImage(image.getInputStream()));
-    }
-
-    @SneakyThrows
-    private static FloatBuffer readImage(InputStream input) {
-        BufferedImage read = ImageIO.read(input);
-
-        Image scaledInstance = read.getScaledInstance(28, 28, Image.SCALE_SMOOTH);
-
-        BufferedImage bufferedImage = new BufferedImage(28, 28, BufferedImage.TYPE_BYTE_GRAY);
-        Graphics2D graphics = bufferedImage.createGraphics();
-        graphics.drawImage(scaledInstance, 0, 0, null);
-        graphics.dispose();
-
-        DataBuffer dataBuffer = bufferedImage.getData().getDataBuffer();
-
-        byte[] bytes = Optional.of(dataBuffer)
-                .filter(DataBufferByte.class::isInstance)
-                .map(DataBufferByte.class::cast)
-                .map(DataBufferByte::getData).orElseThrow();
-
-        return ByteBuffer.wrap(bytes).asFloatBuffer();
+    public long predict(@RequestParam("image") MultipartFile image) throws IOException {
+        return numberDetection.detect(imageConverter.resize(ImageIO.read(image.getInputStream()), 28));
     }
 }
