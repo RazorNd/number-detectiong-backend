@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2018
+ * number-detecting-backend
+ * Copyright (C) 2018 Daniil Razorenov
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
