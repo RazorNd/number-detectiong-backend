@@ -12,7 +12,7 @@ Content-Type: multipart/form-data; boundary=WebAppBoundary
 Content-Disposition: form-data; name="image"; filename="test.png"
 Content-Type: image/png
 
-< test.png
+< test-1.jpg
 --WebAppBoundary--
 
 ###
