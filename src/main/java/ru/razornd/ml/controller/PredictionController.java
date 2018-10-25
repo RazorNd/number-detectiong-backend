@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.razornd.ml;
+package ru.razornd.ml.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import ru.razornd.ml.service.DetectingService;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -33,16 +34,14 @@ import java.io.IOException;
 @Slf4j
 public class PredictionController {
 
-    private final NumberDetection numberDetection;
-    private final ImageConverter imageConverter;
+    private final DetectingService service;
 
-    public PredictionController(NumberDetection numberDetection, ImageConverter imageConverter) {
-        this.numberDetection = numberDetection;
-        this.imageConverter = imageConverter;
+    public PredictionController(DetectingService service) {
+        this.service = service;
     }
 
     @PostMapping
     public long predict(@RequestParam("image") MultipartFile image) throws IOException {
-        return numberDetection.detect(imageConverter.resize(ImageIO.read(image.getInputStream()), 28));
+        return service.predict(ImageIO.read(image.getInputStream()));
     }
 }
