@@ -19,6 +19,7 @@
 package ru.razornd.ml;
 
 import org.junit.Test;
+import ru.razornd.ml.component.NumberDetection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

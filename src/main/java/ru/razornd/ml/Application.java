@@ -22,6 +22,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.reactive.config.EnableWebFlux;
+import ru.razornd.ml.component.ImageConverter;
+import ru.razornd.ml.component.ImageConverterImpl;
+import ru.razornd.ml.component.NumberDetection;
+import ru.razornd.ml.service.DetectingService;
+import ru.razornd.ml.service.TensorFlowDetectingService;
 
 import static java.awt.Image.SCALE_SMOOTH;
 
@@ -40,5 +45,10 @@ public class Application {
     @Bean
     public ImageConverter imageConverter() {
         return new ImageConverterImpl(SCALE_SMOOTH);
+    }
+
+    @Bean
+    public DetectingService detectingService() {
+        return new TensorFlowDetectingService(imageConverter(), numberDetection());
     }
 }

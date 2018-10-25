@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.razornd.ml;
+package ru.razornd.ml.component;
 
 import lombok.SneakyThrows;
 

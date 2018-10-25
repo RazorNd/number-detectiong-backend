@@ -19,6 +19,8 @@
 package ru.razornd.ml;
 
 import org.junit.Test;
+import ru.razornd.ml.component.ImageConverter;
+import ru.razornd.ml.component.ImageConverterImpl;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
