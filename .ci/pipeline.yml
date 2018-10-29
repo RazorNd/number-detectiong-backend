@@ -1,0 +1,15 @@
+---
+resources:
+- name: resource-git
+  type: git
+  source:
+    uri: https://github.com/RazorNd/number-detectiong-backend.git
+
+jobs:
+- name: job-test-app
+  public: true
+  plan:
+  - get: resource-git
+    trigger: true
+  - task: web-app-tests
+    file: resource-git/.ci/build.yml
